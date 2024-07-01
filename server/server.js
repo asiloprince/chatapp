@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const DB = require("./db/connection");
 
 const app = express();
 
@@ -16,10 +17,13 @@ app.use((req, res, next) => {
 
   next();
 });
+DB();
 
 app.get("/", (req, res) => {
   res.send("Chat app with chat kita");
 });
+
+console.log(`Environment: ${process.env.NODE_ENV.toUpperCase()}`);
 
 app.listen(process.env.PORT, () =>
   console.log(`App is listening to server ${process.env.PORT}`)
