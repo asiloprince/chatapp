@@ -1,6 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const DB = require("./db/connection");
+const userApi = require("./api/users");
+const errorMiddleware = require("./global/middleware/error.middleware");
 
 const app = express();
 
@@ -22,6 +24,10 @@ DB();
 app.get("/", (req, res) => {
   res.send("Chat app with chat kita");
 });
+app.use("/api/user", userApi);
+
+app.use(errorMiddleware.notFound);
+app.use(errorMiddleware.errorHandler);
 
 console.log(`Environment: ${process.env.NODE_ENV.toUpperCase()}`);
 
