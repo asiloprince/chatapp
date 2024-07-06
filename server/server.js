@@ -1,7 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const DB = require("./db/connection");
+const cookieParser = require("cookie-parser");
 const userApi = require("./api/users");
+const chatApi = require("./api/chat");
 const errorMiddleware = require("./global/middleware/error.middleware");
 
 const app = express();
@@ -11,6 +13,8 @@ const env_path = `./.env.${process.env.NODE_ENV}`;
 dotenv.config({ path: env_path });
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
+
 app.use((req, res, next) => {
   res.set("Access-Control-Allow-Origin", process.env.CLIENT_URL);
   res.set("Access-Control-Allow-Credentials", true);
@@ -25,6 +29,7 @@ app.get("/", (req, res) => {
   res.send("Chat app with chat kita");
 });
 app.use("/api/user", userApi);
+app.use("/api/chat", chatApi);
 
 app.use(errorMiddleware.notFound);
 app.use(errorMiddleware.errorHandler);

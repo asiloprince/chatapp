@@ -28,12 +28,12 @@ const registerUsersHandler = asyncHandler(async (req, res) => {
     });
 
     if (user) {
+      generateToken(res, user._id);
       res.status(201).json({
         _id: user._id,
         name: user.name,
         email: user.email,
         profile_img: user.profile_img,
-        token: generateToken(user._id),
       });
     } else {
       res.status(400);
@@ -50,12 +50,12 @@ const authLoginUserHandler = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await passwordUtl.matchPassword(password, user.password))) {
+    generateToken(res, user._id);
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       profile_img: user.profile_img,
-      token: generateToken(user._id),
     });
   } else {
     res.status(400);
@@ -63,4 +63,33 @@ const authLoginUserHandler = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUsersHandler, authLoginUserHandler };
+const getAllUsers = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  const users = await User.find(keyword).find({ _id: { $ne: req.user_id } });
+
+  res.send(users);
+});
+
+const logOutUser = asyncHandler(async (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.status(200).json({ message: "Logged out successfully" });
+});
+
+module.exports = {
+  registerUsersHandler,
+  authLoginUserHandler,
+  getAllUsers,
+  logOutUser,
+};
