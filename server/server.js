@@ -4,6 +4,7 @@ const DB = require("./db/connection");
 const cookieParser = require("cookie-parser");
 const userApi = require("./api/users");
 const chatApi = require("./api/chat");
+const messageApi = require("./api/message");
 const errorMiddleware = require("./global/middleware/error.middleware");
 
 const app = express();
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/user", userApi);
 app.use("/api/chat", chatApi);
+app.use("/api/message", messageApi);
 
 app.use(errorMiddleware.notFound);
 app.use(errorMiddleware.errorHandler);
