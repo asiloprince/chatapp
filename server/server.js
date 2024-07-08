@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const DB = require("./db/connection");
 const cookieParser = require("cookie-parser");
 const userApi = require("./api/users");
+const authApi = require("./api/auth");
 const chatApi = require("./api/chat");
 const messageApi = require("./api/message");
 const errorMiddleware = require("./global/middleware/error.middleware");
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
   res.send("Chat app with chat kita");
 });
 app.use("/api/user", userApi);
+app.use("/api/auth", authApi);
 app.use("/api/chat", chatApi);
 app.use("/api/message", messageApi);
 

@@ -87,9 +87,19 @@ const logOutUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
 
+const handleIsUserAuth = asyncHandler(async (req, res) => {
+  res.send({
+    success: true,
+    message: "You're now Authorized",
+    isAuth: true,
+    user: req.user,
+  });
+});
+
 module.exports = {
   registerUsersHandler,
   authLoginUserHandler,
   getAllUsers,
   logOutUser,
+  handleIsUserAuth,
 };
