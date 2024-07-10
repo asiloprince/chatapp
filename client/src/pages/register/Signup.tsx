@@ -19,38 +19,60 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
-const formSchema = z.object({
-  name: z.string(),
-  email: z
-    .string()
-    .min(1, { message: "Email is required" })
-    .email({ message: "Must be a valid email" }),
-  password: z
-    .string()
-    .min(1, { message: "Password required" })
-    .min(8, { message: "Must be at least 8 characters" }),
-});
+const formSchema = z
+  .object({
+    name: z.string(),
+    email: z
+      .string()
+      .min(1, { message: "Email is required" })
+      .email({ message: "Must be a valid email" }),
+    password: z
+      .string()
+      .min(1, { message: "Password required" })
+      .min(8, { message: "Must be at least 8 characters" }),
+    confirmPassword: z
+      .string()
+      .min(1, { message: "Confirm Password required" })
+      .min(8, { message: "Must be at least 8 characters" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 const Signup = () => {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
-    alert("An error occured while signing up");
     try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_PUBLIC_API_URL}/user`,
+        data,
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log(res.data);
+      alert("Register successfully");
+      navigate("/");
     } catch (err) {
       console.error(err);
+      alert("An error occured while signing up");
     }
   }
   return (
@@ -68,7 +90,7 @@ const Signup = () => {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -76,7 +98,7 @@ const Signup = () => {
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input placeholder="Enter your Full Name" {...field} />
                     </FormControl>
 
                     <FormMessage />
@@ -90,7 +112,7 @@ const Signup = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input placeholder="m@gmail.com" {...field} />
                     </FormControl>
 
                     <FormMessage />
@@ -104,7 +126,7 @@ const Signup = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input placeholder="Enter your Password" {...field} />
                     </FormControl>
 
                     <FormMessage />
@@ -113,12 +135,12 @@ const Signup = () => {
               />
               <FormField
                 control={form.control}
-                name="password"
+                name="confirmPassword"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="pb-4">
                     <FormLabel> Confirm Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input placeholder="Confirm your Password" {...field} />
                     </FormControl>
 
                     <FormMessage />

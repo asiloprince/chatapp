@@ -46,9 +46,6 @@ const Login = () => {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
-
-    console.log(data);
-
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_PUBLIC_API_URL}/user/login`,
