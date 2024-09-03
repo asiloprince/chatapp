@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z
@@ -68,98 +70,104 @@ const Signup = () => {
       );
 
       console.log(res.data);
-      alert("Register successfully");
+      toast("Register successfully");
       navigate("/");
     } catch (err) {
       console.error(err);
-      alert("An error occured while signing up");
+      toast("An error occured while signing up");
     }
   }
   return (
-    <div className="flex items-center justify-center ">
-      <Card className="w-[450px] p-4">
-        <CardHeader>
-          <CardTitle className="text-center">
-            <p className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
-              Welcome to Chat tau
+    <div className="lg:col-span-1">
+      <Header />
+      <div className="flex items-center justify-center ">
+        <Card className="w-[450px] p-4">
+          <CardHeader>
+            <CardTitle className="text-center">
+              <p className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
+                Welcome to Chat tau
+              </p>
+            </CardTitle>
+            <CardDescription className="text-neutral-600 text-center text-sm max-w-sm mt-2 dark:text-neutral-300">
+              You and your friends always connected!
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your Full Name" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="m@gmail.com" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your Password" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem className="pb-4">
+                      <FormLabel> Confirm Password</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Confirm your Password" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button className="w-full">Sign Up</Button>
+              </form>
+            </Form>
+          </CardContent>
+          <CardFooter className="flex flex-col items-center">
+            <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
+              Already have an account?
+              <span className="font-bold text-blue-500">
+                <Link to="/login"> Sign In</Link>
+              </span>
             </p>
-          </CardTitle>
-          <CardDescription className="text-neutral-600 text-center text-sm max-w-sm mt-2 dark:text-neutral-300">
-            You and your friends always connected!
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your Full Name" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="m@gmail.com" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your Password" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem className="pb-4">
-                    <FormLabel> Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Confirm your Password" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button className="w-full">Sign Up</Button>
-            </form>
-          </Form>
-        </CardContent>
-        <CardFooter className="flex flex-col items-center">
-          <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-            Already have an account?
-            <span className="font-bold text-blue-500">
-              <Link to="/login"> Sign In</Link>
-            </span>
-          </p>
-        </CardFooter>
-      </Card>
+          </CardFooter>
+        </Card>
+      </div>{" "}
     </div>
   );
 };

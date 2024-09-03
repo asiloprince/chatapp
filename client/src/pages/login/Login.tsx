@@ -22,6 +22,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import axios from "axios";
+import { toast } from "sonner";
+import Header from "@/components/Header";
 
 const formSchema = z.object({
   email: z
@@ -55,75 +57,83 @@ const Login = () => {
         }
       );
       console.log(res.data);
-      alert("Login successfully");
+      toast("Login successfully");
       navigate("/");
     } catch (err) {
       console.error(err);
-      alert("An error occured while signing in");
+      toast("An error occured while signing in");
     }
   }
 
   return (
-    <div className="flex items-center justify-center p-4 ">
-      <Card className="w-[450px] px-4 py-8">
-        <CardHeader>
-          <CardDescription className="text-center">Welcome to</CardDescription>
-          <CardTitle className="text-center">Chat tau</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="m@gmail" {...field} />
-                    </FormControl>
+    <div className="lg:col-span-1">
+      <Header />
+      <div className="flex items-center justify-center p-4 ">
+        <Card className="w-[450px] px-4 py-8">
+          <CardHeader>
+            <CardDescription className="text-center">
+              Welcome to
+            </CardDescription>
+            <CardTitle className="text-center">Chat tau</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input placeholder="m@gmail" {...field} />
+                      </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="password"
-                        type="password"
-                        {...field}
-                      />
-                    </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="password"
+                          type="password"
+                          {...field}
+                        />
+                      </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button className="w-full" type="submit">
-                Sign In
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-        <CardFooter>
-          <Button variant="outline" className="w-full">
-            Guess Login
-          </Button>
-        </CardFooter>
-        <p className="text-neutral-600 text-center text-sm max-w-sm mt-2 dark:text-neutral-300 ">
-          Don&apos;t have an account?{" "}
-          <span className="font-bold text-blue-500">
-            {" "}
-            <Link to="/signup"> Sign Up </Link>
-          </span>
-        </p>
-      </Card>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button className="w-full" type="submit">
+                  Sign In
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" className="w-full">
+              Guess Login
+            </Button>
+          </CardFooter>
+          <p className="text-neutral-600 text-center text-sm max-w-sm mt-2 dark:text-neutral-300 ">
+            Don&apos;t have an account?{" "}
+            <span className="font-bold text-blue-500">
+              {" "}
+              <Link to="/signup"> Sign Up </Link>
+            </span>
+          </p>
+        </Card>
+      </div>
     </div>
   );
 };

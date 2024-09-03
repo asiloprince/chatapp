@@ -9,41 +9,44 @@ import {
   LoggedInPageProtection,
   NonLoggedInPage,
 } from "./components/RouteProtections";
+import ChatProvider from "./contexts/chats";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route
-            index
-            element={
-              <LoggedInPageProtection>
-                <Home />
-              </LoggedInPageProtection>
-            }
-          ></Route>
-          <Route path="chats" element={<Chats />}></Route>
+    <ChatProvider>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            <Route
+              index
+              element={
+                <LoggedInPageProtection>
+                  <Chats />
+                </LoggedInPageProtection>
+              }
+            ></Route>
+            <Route path="chats" element={<Home />}></Route>
 
-          <Route
-            path="login"
-            element={
-              <NonLoggedInPage>
-                <Login />
-              </NonLoggedInPage>
-            }
-          ></Route>
-          <Route
-            path="signup"
-            element={
-              <NonLoggedInPage>
-                <Signup />
-              </NonLoggedInPage>
-            }
-          ></Route>
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+            <Route
+              path="login"
+              element={
+                <NonLoggedInPage>
+                  <Login />
+                </NonLoggedInPage>
+              }
+            ></Route>
+            <Route
+              path="signup"
+              element={
+                <NonLoggedInPage>
+                  <Signup />
+                </NonLoggedInPage>
+              }
+            ></Route>
+          </Routes>
+        </Layout>
+      </BrowserRouter>
+    </ChatProvider>
   );
 }
 
